@@ -20,7 +20,7 @@ It provides an **interactive dashboard** to visualize public sentiment and issue
 git clone https://github.com/<your-username>/civic-pulse-sangli.git
 cd civic-pulse-sangli
 
-###2. Create Virtual Environment
+### 2. Create Virtual Environment
 Windows (PowerShell):
 python -m venv venv
 venv\Scripts\Activate.ps1
@@ -29,15 +29,15 @@ Linux/Mac:
 python3 -m venv venv
 source venv/bin/activate
 
-###3. Install Requirements
+### 3. Install Requirements
 pip install -r requirements.txt
 
-###4. Add API Keys
+### 4. Add API Keys
 Copy .env.example → .env and add your keys:
 TWITTER_BEARER_TOKEN=your_token_here
 NEWSAPI_KEY=your_api_key_here
 
-###5. Test Setup
+### 5. Test Setup
 python src/test_setup.py
 
 ## ▶️ Usage
