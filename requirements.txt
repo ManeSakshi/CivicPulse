@@ -1,0 +1,49 @@
+# Core
+pandas
+numpy
+
+# NLP & Preprocessing
+spacy
+nltk
+emoji
+langdetect
+googletrans==4.0.0-rc1
+
+# ML & Deep Learning
+torch
+transformers
+scikit-learn
+
+# Explainable AI
+shap
+lime
+
+# Topic Modeling
+bertopic
+gensim
+
+# Visualization & Dashboard
+matplotlib
+seaborn
+plotly
+dash
+streamlit
+
+# Backend & API
+flask
+fastapi
+uvicorn
+
+# Database
+sqlalchemy
+psycopg2-binary   # (for PostgreSQL if needed)
+sqlite-utils
+
+# Data Collection APIs
+tweepy
+newsapi-python
+python-dotenv
+
+# Dev & Utilities
+jupyter
+notebook
