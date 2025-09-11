@@ -40,12 +40,3 @@ NEWSAPI_KEY=your_api_key_here
 ### 5. Test Setup
 python src/test_setup.py
 
-## ▶️ Usage
-'''
-python src/fetch_twitter.py      # Collect tweets
-python src/fetch_news.py         # Collect news
-python src/preprocess.py         # Clean data
-python src/sentiment_infer.py    # Run sentiment analysis
-python src/topic_model.py        # Topic modeling
-streamlit run src/dashboard_app.py   # Run dashboard
-'''
