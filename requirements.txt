@@ -1,49 +1,46 @@
-# Core
-pandas
-numpy
+# Core scientific stack
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.5.2
+scipy==1.13.1
 
-# NLP & Preprocessing
-spacy
-nltk
-emoji
-langdetect
-googletrans==4.0.0-rc1
+# NLP + Transformers
+spacy==3.7.5
+nltk==3.9.1
+transformers==4.44.2
+torch==2.4.1
+sentence-transformers==3.0.1
 
-# ML & Deep Learning
-torch
-transformers
-scikit-learn
-
-# Explainable AI
-shap
-lime
+# Sentiment Explainability
+shap==0.45.1
+lime==0.2.0.1
 
 # Topic Modeling
-bertopic
-gensim
+bertopic==0.16.3
+gensim==4.3.3
+hdbscan==0.8.36
 
 # Visualization & Dashboard
-matplotlib
-seaborn
-plotly
-dash
-streamlit
+matplotlib==3.9.2
+seaborn==0.13.2
+plotly==5.24.1
+dash==2.17.1
+streamlit==1.38.0
 
-# Backend & API
-flask
-fastapi
-uvicorn
+# APIs & Utils
+tweepy==4.14.0
+newsapi-python==0.2.7
+python-dotenv==1.0.1
 
 # Database
-sqlalchemy
-psycopg2-binary   # (for PostgreSQL if needed)
-sqlite-utils
+sqlalchemy==2.0.34
+sqlite-utils==3.37
 
-# Data Collection APIs
-tweepy
-newsapi-python
-python-dotenv
+# Web Backend
+flask==3.0.3
+fastapi==0.112.2
+uvicorn==0.30.6
 
-# Dev & Utilities
-jupyter
-notebook
+# Jupyter (optional for exploration)
+jupyter==1.0.0
+notebook==7.2.2
