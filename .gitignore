@@ -18,9 +18,15 @@ models/
 data/external/Sentiment140.csv
 data/external/Tweets.csv
 
-# Generated data files
+# Generated data files (allow specific important files)
 data/raw/*.csv
+!data/raw/all_news_data.csv
+!data/raw/gnews_data.csv
+!data/raw/local_news.csv
+!data/raw/news_data.csv
+!data/raw/twitter_data.csv
 data/processed/*.csv
+!data/processed/civicpulse_processed.csv
 
 # IDEs & OS
 .vscode/
