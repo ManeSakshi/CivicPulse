@@ -5,6 +5,7 @@ import pandas as pd
 import spacy
 import glob
 import re
+import os
 
 # ------------------------------
 # 1️⃣ Load SpaCy model for English
@@ -21,24 +22,102 @@ except OSError:
     print("✅ SpaCy model installed and loaded")
 
 # ------------------------------
-# 2️⃣ Define text cleaning function
+# 2️⃣ Define enhanced text cleaning function
 # ------------------------------
 def clean_text(text):
-    if pd.isnull(text):
+    if pd.isnull(text) or text == "" or str(text).lower() == "nan":
         return ""
-    text = text.lower()  # lowercase
-    text = re.sub(r"http\S+|www\S+|https\S+", "", text)  # remove URLs
-    text = re.sub(r"[^a-zA-Z\s]", "", text)  # remove special characters & numbers
-    text = re.sub(r"\s+", " ", text).strip()  # remove extra whitespace
+    
+    text = str(text)  # ensure string type
+    
+    # Handle encoding issues and special characters
+    text = text.encode('utf-8', errors='ignore').decode('utf-8')
+    
+    # Convert to lowercase
+    text = text.lower()
+    
+    # Remove URLs and email addresses
+    text = re.sub(r"http\S+|www\S+|https\S+", "", text)
+    text = re.sub(r"\S+@\S+", "", text)
+    
+    # Remove HTML tags
+    text = re.sub(r"<[^>]+>", "", text)
+    
+    # Remove special patterns common in news
+    text = re.sub(r"\[\+\d+ chars\]", "", text)  # Remove "[+1234 chars]" patterns
+    text = re.sub(r"\.\.\.", " ", text)  # Replace "..." with space
+    
+    # Keep only alphabetic characters and spaces
+    text = re.sub(r"[^a-zA-Z\s]", " ", text)
+    
+    # Remove extra whitespace and normalize
+    text = re.sub(r"\s+", " ", text).strip()
+    
+    # Remove very short words (less than 2 characters)
+    text = " ".join([word for word in text.split() if len(word) >= 2])
+    
     return text
 
 # ------------------------------
-# 3️⃣ Define lemmatization + stopword removal
+# 3️⃣ Define enhanced lemmatization + stopword removal
 # ------------------------------
 def preprocess_text(text):
+    if not text or len(text.strip()) < 3:
+        return ""
+    
+    # Process text with spaCy
     doc = nlp(text)
-    tokens = [token.lemma_ for token in doc if not token.is_stop and token.lemma_ != "-PRON-"]
-    return " ".join(tokens)
+    
+    # Extract meaningful tokens
+    tokens = []
+    for token in doc:
+        # Skip if it's a stop word, punctuation, space, or pronoun placeholder
+        if (not token.is_stop and 
+            not token.is_punct and 
+            not token.is_space and 
+            token.lemma_ != "-PRON-" and
+            len(token.lemma_) >= 2 and
+            token.lemma_.isalpha()):
+            tokens.append(token.lemma_.lower())
+    
+    # Remove duplicates while preserving order
+    seen = set()
+    unique_tokens = []
+    for token in tokens:
+        if token not in seen:
+            seen.add(token)
+            unique_tokens.append(token)
+    
+    return " ".join(unique_tokens)
+
+# ------------------------------
+# 3.5️⃣ Intelligent text combination function
+# ------------------------------
+def combine_text_fields(row):
+    """Intelligently combine title, description, content, and text fields"""
+    text_parts = []
+    
+    # Priority order: title -> description -> content -> text
+    fields = ['title', 'description', 'content', 'text']
+    
+    for field in fields:
+        if field in row and pd.notna(row[field]) and str(row[field]).strip():
+            cleaned = clean_text(row[field])
+            if cleaned and len(cleaned) >= 10:  # Only include meaningful text
+                text_parts.append(cleaned)
+    
+    # Combine all parts, removing duplicates
+    combined = " ".join(text_parts)
+    
+    # If combined text is too short, try individual fields
+    if len(combined.strip()) < 20:
+        for field in fields:
+            if field in row and pd.notna(row[field]):
+                cleaned = clean_text(row[field])
+                if len(cleaned) >= 5:
+                    return cleaned
+    
+    return combined
 
 # ------------------------------
 # 4️⃣ Load all CSV files from 'data/raw' folder
@@ -52,16 +131,46 @@ for file in file_paths:
 
 # Merge all CSVs
 data = pd.concat(df_list, ignore_index=True)
+print(f"📊 Loaded {len(data)} total records from {len(df_list)} CSV files")
 
 # ------------------------------
-# 5️⃣ Apply cleaning & preprocessing
+# 5️⃣ Apply intelligent text processing
 # ------------------------------
-data['clean_text'] = data['text'].astype(str).apply(clean_text)
-data['processed_text'] = data['clean_text'].apply(preprocess_text)
+print("🧹 Step 1: Combining and cleaning text fields...")
+data['combined_text'] = data.apply(combine_text_fields, axis=1)
+
+# Filter out rows with insufficient text
+before_filter = len(data)
+data = data[data['combined_text'].str.len() >= 10].reset_index(drop=True)
+after_filter = len(data)
+print(f"📝 Filtered out {before_filter - after_filter} rows with insufficient text")
+
+print("🔤 Step 2: Advanced text preprocessing (lemmatization, stopword removal)...")
+data['processed_text'] = data['combined_text'].apply(preprocess_text)
+
+# Final cleanup - remove rows where processed text is empty
+before_final = len(data)
+data = data[data['processed_text'].str.len() >= 5].reset_index(drop=True)
+after_final = len(data)
+print(f"🎯 Final dataset: {after_final} rows ({before_final - after_final} empty rows removed)")
 
 # ------------------------------
-# 6️⃣ Save final cleaned dataset
+# 6️⃣ Data quality analysis and save
 # ------------------------------
-data.to_csv("data/processed/civicpulse_processed.csv", index=False)
-print(f"✅ Preprocessing complete! Total entries: {len(data)}")
-print("Processed dataset saved at: data/processed/civicpulse_processed.csv")
+print("\n📈 Data Quality Analysis:")
+print(f"   • Average text length: {data['combined_text'].str.len().mean():.1f} characters")
+print(f"   • Average processed length: {data['processed_text'].str.len().mean():.1f} characters")
+print(f"   • Vocabulary size: {len(set(' '.join(data['processed_text']).split()))} unique words")
+
+# Add text statistics columns
+data['text_length'] = data['combined_text'].str.len()
+data['processed_length'] = data['processed_text'].str.len()
+data['word_count'] = data['processed_text'].str.split().str.len()
+
+# Save final cleaned dataset
+os.makedirs("data/processed", exist_ok=True)
+data.to_csv("data/processed/civicpulse_processed.csv", index=False, encoding='utf-8')
+
+print(f"\n✅ Preprocessing complete! Total entries: {len(data)}")
+print(f"💾 Processed dataset saved at: data/processed/civicpulse_processed.csv")
+print(f"🎯 Ready for sentiment analysis and topic modeling!")
