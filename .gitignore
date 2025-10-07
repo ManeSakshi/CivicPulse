@@ -27,6 +27,11 @@ data/raw/*.csv
 !data/raw/twitter_data.csv
 data/processed/*.csv
 !data/processed/civicpulse_processed.csv
+!data/processed/civic_labeled.csv
+!data/processed/civicpulse_with_labels.csv
+# Large training files - keep local only
+data/processed/external/train_external.csv
+data/processed/external/test_external.csv
 
 # IDEs & OS
 .vscode/
