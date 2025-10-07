@@ -3,12 +3,14 @@
 ## 📊 **Dataset Overview**
 
 ### **External Training Data (Kaggle)**
+
 - **Sentiment140**: 1,560,780 labeled tweets (negative: 783,905, positive: 776,875)
 - **Airline Tweets**: 14,317 labeled tweets (negative: 9,178, positive: 2,363, neutral: 2,776)
 - **Combined**: 1,575,097 total labeled records
 - **Split**: 80% train (1,260,077) / 20% test (315,020)
 
 ### **Civic Data (Your Collection)**
+
 - **Total**: 544 records from news/Twitter APIs
 - **Sources**: NewsAPI, GNews, Local News, Twitter
 - **Auto-labeled**: VADER + TextBlob consensus
@@ -37,13 +39,15 @@ data/
 ## 🚀 **Next Steps for BERT Training**
 
 ### **Option 1: Train on External Data First**
+
 ```python
 # Use: data/processed/external/train_external.csv
 # 1.26M labeled examples - good for BERT fine-tuning
 # Then apply to civic data for predictions
 ```
 
-### **Option 2: Train on Civic Data Only**  
+### **Option 2: Train on Civic Data Only**
+
 ```python
 # Use: data/processed/civic_labeled.csv
 # 544 labeled examples - good for domain-specific model
@@ -51,6 +55,7 @@ data/
 ```
 
 ### **Option 3: Combined Approach (Recommended)**
+
 ```python
 # 1. Pre-train on external data (general sentiment)
 # 2. Fine-tune on civic data (domain adaptation)
