@@ -14,13 +14,13 @@ venv/
 data/*.db
 models/
 
-# Large dataset files (download separately)
+# Large dataset files (download separately - these are huge files)
 data/external/Sentiment140.csv
 data/external/Tweets.csv
 
-# Generated data files
-data/raw/*.csv
-data/processed/*.csv
+# Keep sample data but ignore large generated files
+data/processed/large_*.csv
+data/processed/full_*.csv
 
 # IDEs & OS
 .vscode/
