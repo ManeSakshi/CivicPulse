@@ -11,9 +11,16 @@ venv/
 .ipynb_checkpoints/
 
 # Data & DB
-data/*.csv
 data/*.db
 models/
+
+# Large dataset files (download separately)
+data/external/Sentiment140.csv
+data/external/Tweets.csv
+
+# Generated data files
+data/raw/*.csv
+data/processed/*.csv
 
 # IDEs & OS
 .vscode/
