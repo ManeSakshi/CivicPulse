@@ -6,57 +6,25 @@ import spacy
 import glob
 import re
 import os
+from utils import clean_text
 
 # ------------------------------
 # 1️⃣ Load SpaCy model for English
 # ------------------------------
 try:
     nlp = spacy.load("en_core_web_sm")
-    print("✅ SpaCy English model loaded successfully")
+    print("[OK] SpaCy English model loaded successfully")
 except OSError:
-    print("❌ SpaCy model 'en_core_web_sm' not found!")
+    print("[ERROR] SpaCy model 'en_core_web_sm' not found!")
     print("📥 Installing it now...")
     import subprocess
     subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
     nlp = spacy.load("en_core_web_sm")
-    print("✅ SpaCy model installed and loaded")
+    print("[OK] SpaCy model installed and loaded")
 
 # ------------------------------
-# 2️⃣ Define enhanced text cleaning function
+# 2️⃣ Text cleaning now handled by utils.py
 # ------------------------------
-def clean_text(text):
-    if pd.isnull(text) or text == "" or str(text).lower() == "nan":
-        return ""
-    
-    text = str(text)  # ensure string type
-    
-    # Handle encoding issues and special characters
-    text = text.encode('utf-8', errors='ignore').decode('utf-8')
-    
-    # Convert to lowercase
-    text = text.lower()
-    
-    # Remove URLs and email addresses
-    text = re.sub(r"http\S+|www\S+|https\S+", "", text)
-    text = re.sub(r"\S+@\S+", "", text)
-    
-    # Remove HTML tags
-    text = re.sub(r"<[^>]+>", "", text)
-    
-    # Remove special patterns common in news
-    text = re.sub(r"\[\+\d+ chars\]", "", text)  # Remove "[+1234 chars]" patterns
-    text = re.sub(r"\.\.\.", " ", text)  # Replace "..." with space
-    
-    # Keep only alphabetic characters and spaces
-    text = re.sub(r"[^a-zA-Z\s]", " ", text)
-    
-    # Remove extra whitespace and normalize
-    text = re.sub(r"\s+", " ", text).strip()
-    
-    # Remove very short words (less than 2 characters)
-    text = " ".join([word for word in text.split() if len(word) >= 2])
-    
-    return text
 
 # ------------------------------
 # 3️⃣ Define enhanced lemmatization + stopword removal
@@ -171,6 +139,6 @@ data['word_count'] = data['processed_text'].str.split().str.len()
 os.makedirs("data/processed", exist_ok=True)
 data.to_csv("data/processed/civicpulse_processed.csv", index=False, encoding='utf-8')
 
-print(f"\n✅ Preprocessing complete! Total entries: {len(data)}")
+print(f"\n[OK] Preprocessing complete! Total entries: {len(data)}")
 print(f"💾 Processed dataset saved at: data/processed/civicpulse_processed.csv")
 print(f"🎯 Ready for sentiment analysis and topic modeling!")

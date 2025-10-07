@@ -5,30 +5,9 @@ import pandas as pd
 import os
 import re
 from sklearn.model_selection import train_test_split
+from utils import clean_text
 
-def clean_external_text(text):
-    """Clean external dataset text (similar to civic data cleaning)"""
-    if pd.isnull(text) or text == "" or str(text).lower() == "nan":
-        return ""
-    
-    text = str(text)
-    text = text.encode('utf-8', errors='ignore').decode('utf-8')
-    text = text.lower()
-    
-    # Remove URLs, mentions, hashtags (common in tweets)
-    text = re.sub(r"http\S+|www\S+|https\S+", "", text)
-    text = re.sub(r"@\w+|#\w+", "", text)  # Remove @mentions and #hashtags
-    text = re.sub(r"rt\s+", "", text)  # Remove "RT" (retweet indicators)
-    
-    # Remove HTML tags and special patterns
-    text = re.sub(r"<[^>]+>", "", text)
-    text = re.sub(r"[^a-zA-Z\s]", " ", text)
-    text = re.sub(r"\s+", " ", text).strip()
-    
-    # Remove very short words
-    text = " ".join([word for word in text.split() if len(word) >= 2])
-    
-    return text
+# Text cleaning now handled by utils.py clean_text() function with tweet_mode=True
 
 def process_sentiment140():
     """Process Sentiment140 dataset"""
@@ -36,7 +15,7 @@ def process_sentiment140():
     
     file_path = "data/external/Sentiment140.csv"
     if not os.path.exists(file_path):
-        print(f"❌ {file_path} not found. Please ensure the file exists.")
+        print(f"[ERROR] {file_path} not found. Please ensure the file exists.")
         return None
     
     # Sentiment140 format: target,ids,date,flag,user,text
@@ -52,7 +31,7 @@ def process_sentiment140():
         df['sentiment'] = df['target'].map(sentiment_map)
         
         # Clean text
-        df['cleaned_text'] = df['text'].apply(clean_external_text)
+        df['cleaned_text'] = df['text'].apply(lambda x: clean_text(x, tweet_mode=True))
         
         # Filter out empty text
         df = df[df['cleaned_text'].str.len() >= 10].reset_index(drop=True)
@@ -61,11 +40,11 @@ def process_sentiment140():
         df_clean = df[['cleaned_text', 'sentiment', 'user', 'date']].copy()
         df_clean.columns = ['text', 'label', 'user', 'date']
         
-        print(f"   ✅ Processed {len(df_clean)} valid sentiment records")
+        print(f"   [OK] Processed {len(df_clean)} valid sentiment records")
         return df_clean
         
     except Exception as e:
-        print(f"❌ Error processing Sentiment140: {e}")
+        print(f"[ERROR] Error processing Sentiment140: {e}")
         return None
 
 def process_tweets_csv():
@@ -74,7 +53,7 @@ def process_tweets_csv():
     
     file_path = "data/external/Tweets.csv"
     if not os.path.exists(file_path):
-        print(f"❌ {file_path} not found. Please ensure the file exists.")
+        print(f"[ERROR] {file_path} not found. Please ensure the file exists.")
         return None
     
     try:
@@ -99,20 +78,20 @@ def process_tweets_csv():
                 break
         
         if text_col and sentiment_col:
-            df['cleaned_text'] = df[text_col].apply(clean_external_text)
+            df['cleaned_text'] = df[text_col].apply(lambda x: clean_text(x, tweet_mode=True))
             df = df[df['cleaned_text'].str.len() >= 10].reset_index(drop=True)
             
             df_clean = df[['cleaned_text', sentiment_col]].copy()
             df_clean.columns = ['text', 'label']
             
-            print(f"   ✅ Processed {len(df_clean)} valid records")
+            print(f"   [OK] Processed {len(df_clean)} valid records")
             return df_clean
         else:
-            print(f"   ⚠️ Could not identify text/sentiment columns. Manual adjustment needed.")
+            print(f"   [WARN] Could not identify text/sentiment columns. Manual adjustment needed.")
             return None
             
     except Exception as e:
-        print(f"❌ Error processing Tweets.csv: {e}")
+        print(f"[ERROR] Error processing Tweets.csv: {e}")
         return None
 
 def create_training_datasets():

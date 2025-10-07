@@ -15,7 +15,7 @@ def install_required_packages():
         print("📥 Installing required packages...")
         import subprocess
         subprocess.run(["pip", "install", "vaderSentiment", "textblob"], check=True)
-        print("✅ Packages installed")
+        print("[OK] Packages installed")
 
 def generate_labels_civic_data():
     """Generate sentiment labels for civic data"""

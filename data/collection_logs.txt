@@ -1,0 +1,125 @@
+[2025-10-07 21:39:57] INFO: Checking current data status...
+[2025-10-07 21:39:59] INFO: all_news_data.csv: 367 records
+[2025-10-07 21:39:59] INFO: local_news.csv: 33 records
+[2025-10-07 21:39:59] INFO: twitter_data.csv: 32 records
+[2025-10-07 21:39:59] INFO: ==================================================
+[2025-10-07 21:39:59] INFO: CivicPulse Data Collection Session Started
+[2025-10-07 21:39:59] INFO: ==================================================
+[2025-10-07 21:39:59] INFO: Starting News Collection...
+[2025-10-07 21:40:04] ERROR: News Collection failed with code 1
+[2025-10-07 21:40:04] ERROR: Error: Traceback (most recent call last):
+  File "C:\Users\manes\OneDrive\Documents\Desktop\CivicPulse\src\fetch_news_unified.py", line 276, in <module>
+    total_new = collect_all_news(include_local=True, i
+[2025-10-07 21:40:04] INFO: Starting Twitter Collection...
+[2025-10-07 21:40:08] ERROR: Twitter Collection failed with code 1
+[2025-10-07 21:40:08] ERROR: Error: Traceback (most recent call last):
+  File "C:\Users\manes\OneDrive\Documents\Desktop\CivicPulse\src\fetch_twitter_hybrid.py", line 27, in <module>
+    print("\u2705 Tweepy client initialized")
+    ~~~
+[2025-10-07 21:40:08] INFO: ==================================================
+[2025-10-07 21:40:08] INFO: Collection Session Complete: 0/2 scripts succeeded
+[2025-10-07 21:40:08] INFO: ==================================================
+[2025-10-07 21:40:08] INFO: Checking current data status...
+[2025-10-07 21:40:08] INFO: all_news_data.csv: 367 records
+[2025-10-07 21:40:08] INFO: local_news.csv: 33 records
+[2025-10-07 21:40:08] INFO: twitter_data.csv: 32 records
+[2025-10-07 21:40:39] INFO: Checking current data status...
+[2025-10-07 21:40:41] INFO: all_news_data.csv: 367 records
+[2025-10-07 21:40:41] INFO: local_news.csv: 33 records
+[2025-10-07 21:40:41] INFO: twitter_data.csv: 32 records
+[2025-10-07 21:40:41] INFO: ==================================================
+[2025-10-07 21:40:41] INFO: CivicPulse Data Collection Session Started
+[2025-10-07 21:40:41] INFO: ==================================================
+[2025-10-07 21:40:41] INFO: Starting News Collection...
+[2025-10-07 21:40:45] ERROR: News Collection failed with code 1
+[2025-10-07 21:40:45] ERROR: Error: Traceback (most recent call last):
+  File "C:\Users\manes\OneDrive\Documents\Desktop\CivicPulse\src\fetch_news_unified.py", line 276, in <module>
+    total_new = collect_all_news(include_local=True, i
+[2025-10-07 21:40:45] INFO: Starting Twitter Collection...
+[2025-10-07 21:40:48] ERROR: Twitter Collection failed with code 1
+[2025-10-07 21:40:48] ERROR: Error: Traceback (most recent call last):
+  File "C:\Users\manes\OneDrive\Documents\Desktop\CivicPulse\src\fetch_twitter_hybrid.py", line 27, in <module>
+    print("\u2705 Tweepy client initialized")
+    ~~~
+[2025-10-07 21:40:48] INFO: ==================================================
+[2025-10-07 21:40:48] INFO: Collection Session Complete: 0/2 scripts succeeded
+[2025-10-07 21:40:48] INFO: ==================================================
+[2025-10-07 21:40:48] INFO: Checking current data status...
+[2025-10-07 21:40:48] INFO: all_news_data.csv: 367 records
+[2025-10-07 21:40:48] INFO: local_news.csv: 33 records
+[2025-10-07 21:40:48] INFO: twitter_data.csv: 32 records
+[2025-10-07 22:11:48] INFO: Checking current data status...
+[2025-10-07 22:11:50] INFO: all_news_data.csv: 402 records
+[2025-10-07 22:11:50] INFO: local_news.csv: 33 records
+[2025-10-07 22:11:51] INFO: twitter_data.csv: 32 records
+[2025-10-07 22:11:51] INFO: ==================================================
+[2025-10-07 22:11:51] INFO: CivicPulse Data Collection Session Started
+[2025-10-07 22:11:51] INFO: ==================================================
+[2025-10-07 22:11:51] INFO: Starting News Collection...
+[2025-10-07 22:11:55] ERROR: News Collection failed with code 1
+[2025-10-07 22:11:55] ERROR: Error: Traceback (most recent call last):
+  File "C:\Users\manes\OneDrive\Documents\Desktop\CivicPulse\src\fetch_news_unified.py", line 276, in <module>
+    total_new = collect_all_news(include_local=True, i
+[2025-10-07 22:11:55] INFO: Starting Twitter Collection...
+[2025-10-07 22:12:00] ERROR: Twitter Collection failed with code 1
+[2025-10-07 22:12:00] ERROR: Error: Traceback (most recent call last):
+  File "C:\Users\manes\OneDrive\Documents\Desktop\CivicPulse\src\fetch_twitter_hybrid.py", line 184, in <module>
+    merged_df, new_count = collect_all_tweets()
+    
+[2025-10-07 22:12:00] INFO: ==================================================
+[2025-10-07 22:12:00] INFO: Collection Session Complete: 0/2 scripts succeeded
+[2025-10-07 22:12:00] INFO: ==================================================
+[2025-10-07 22:12:00] INFO: Checking current data status...
+[2025-10-07 22:12:00] INFO: all_news_data.csv: 402 records
+[2025-10-07 22:12:00] INFO: local_news.csv: 33 records
+[2025-10-07 22:12:00] INFO: twitter_data.csv: 32 records
+[2025-10-07 22:17:42] INFO: Checking current data status...
+[2025-10-07 22:17:44] INFO: all_news_data.csv: 427 records
+[2025-10-07 22:17:44] INFO: local_news.csv: 33 records
+[2025-10-07 22:17:44] INFO: twitter_data.csv: 52 records
+[2025-10-07 22:17:44] INFO: ==================================================
+[2025-10-07 22:17:44] INFO: CivicPulse Data Collection Session Started
+[2025-10-07 22:17:44] INFO: ==================================================
+[2025-10-07 22:17:44] INFO: Starting News Collection...
+[2025-10-07 22:17:48] ERROR: News Collection failed with code 1
+[2025-10-07 22:17:48] ERROR: Error: Traceback (most recent call last):
+  File "C:\Users\manes\OneDrive\Documents\Desktop\CivicPulse\src\fetch_news_unified.py", line 276, in <module>
+    total_new = collect_all_news(include_local=True, i
+[2025-10-07 22:17:48] INFO: Starting Twitter Collection...
+[2025-10-07 22:17:53] ERROR: Twitter Collection failed with code 1
+[2025-10-07 22:17:53] ERROR: Error: Traceback (most recent call last):
+  File "C:\Users\manes\OneDrive\Documents\Desktop\CivicPulse\src\fetch_twitter_hybrid.py", line 184, in <module>
+    merged_df, new_count = collect_all_tweets()
+    
+[2025-10-07 22:17:53] INFO: ==================================================
+[2025-10-07 22:17:53] INFO: Collection Session Complete: 0/2 scripts succeeded
+[2025-10-07 22:17:53] INFO: ==================================================
+[2025-10-07 22:17:53] INFO: Checking current data status...
+[2025-10-07 22:17:53] INFO: all_news_data.csv: 427 records
+[2025-10-07 22:17:53] INFO: local_news.csv: 33 records
+[2025-10-07 22:17:53] INFO: twitter_data.csv: 52 records
+[2025-10-07 22:20:20] INFO: Checking current data status...
+[2025-10-07 22:20:20] INFO: all_news_data.csv: 427 records
+[2025-10-07 22:20:20] INFO: local_news.csv: 33 records
+[2025-10-07 22:20:20] INFO: twitter_data.csv: 52 records
+[2025-10-07 22:20:20] INFO: ==================================================
+[2025-10-07 22:20:20] INFO: CivicPulse Data Collection Session Started
+[2025-10-07 22:20:20] INFO: ==================================================
+[2025-10-07 22:20:20] INFO: Starting News Collection...
+[2025-10-07 22:20:26] ERROR: News Collection failed with code 1
+[2025-10-07 22:20:26] ERROR: Error: Traceback (most recent call last):
+  File "C:\Users\manes\OneDrive\Documents\Desktop\CivicPulse\src\fetch_news_unified.py", line 276, in <module>
+    total_new = collect_all_news(include_local=True, i
+[2025-10-07 22:20:26] INFO: Starting Twitter Collection...
+[2025-10-07 22:20:30] ERROR: Twitter Collection failed with code 1
+[2025-10-07 22:20:30] ERROR: Error: Traceback (most recent call last):
+  File "C:\Users\manes\OneDrive\Documents\Desktop\CivicPulse\src\fetch_twitter_hybrid.py", line 184, in <module>
+    merged_df, new_count = collect_all_tweets()
+    
+[2025-10-07 22:20:31] INFO: ==================================================
+[2025-10-07 22:20:31] INFO: Collection Session Complete: 0/2 scripts succeeded
+[2025-10-07 22:20:31] INFO: ==================================================
+[2025-10-07 22:20:31] INFO: Checking current data status...
+[2025-10-07 22:20:31] INFO: all_news_data.csv: 427 records
+[2025-10-07 22:20:31] INFO: local_news.csv: 33 records
+[2025-10-07 22:20:31] INFO: twitter_data.csv: 52 records
