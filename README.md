@@ -10,7 +10,7 @@
 # 1. Navigate to project
 cd "C:\Users\manes\OneDrive\Documents\Desktop\CivicPulse"
 
-# 2. Launch dashboard  
+# 2. Launch dashboard
 python -m streamlit run src/dashboard_simple.py
 
 # 3. Open browser: http://localhost:8501
@@ -23,6 +23,7 @@ python -m streamlit run src/dashboard_simple.py
 👉 **[READ THE COMPLETE PROJECT GUIDE](COMPLETE_PROJECT_GUIDE.md)** 👈
 
 The comprehensive guide includes:
+
 - 🎯 Complete project overview & architecture
 - 🤖 Machine learning model details (89.04% accuracy)
 - 📊 Data analysis & civic insights (1,003 records)
@@ -32,10 +33,10 @@ The comprehensive guide includes:
 - 🔍 Troubleshooting & support
 
 ## ✨ **KEY FEATURES**
+
 - **Real-time Sentiment Analysis** (89.04% accuracy)
 - **6 Civic Issue Categories** (Roads, Water, Traffic, etc.)
 - **Interactive Dashboard** with live visualization
 - **Complete Automation** via Windows batch scripts
 - **1,003 Sangli Civic Records** processed
 - **Multi-source Data Collection** (News + Social Media)
-

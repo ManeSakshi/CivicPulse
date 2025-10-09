@@ -23,7 +23,8 @@ os.makedirs("data/raw", exist_ok=True)
 client = None
 if BEARER_TOKEN:
     try:
-        client = tweepy.Client(bearer_token=BEARER_TOKEN, wait_on_rate_limit=True)
+        # Set wait_on_rate_limit=False to avoid long waits during automation
+        client = tweepy.Client(bearer_token=BEARER_TOKEN, wait_on_rate_limit=False)
         print("[OK] Tweepy client initialized")
     except Exception as e:
         print(f"[WARN] Tweepy setup failed: {e}")
