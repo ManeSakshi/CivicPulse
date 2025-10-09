@@ -1,0 +1,14 @@
+{
+  "total_records": 228,
+  "sentiment_distribution": {
+    "neutral": 101,
+    "positive": 85,
+    "negative": 42
+  },
+  "last_updated": "2025-10-09T22:08:26.212361",
+  "data_sources": {
+    "sangli_twitter": 100,
+    "sangli_news": 84,
+    "local_news": 44
+  }
+}

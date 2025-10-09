@@ -27,18 +27,32 @@ class SimpleCivicDashboard:
         self.topic_results = None
         
     def load_data(self):
-        """Load all data for dashboard"""
+        """Load data for dashboard - prioritize Sangli-only data"""
         try:
-            # Load civic data
-            if os.path.exists("data/processed/civic_labeled.csv"):
+            # First try to load Sangli-only data (preferred)
+            if os.path.exists("data/processed/sangli_labeled.csv"):
+                self.civic_df = pd.read_csv("data/processed/sangli_labeled.csv")
+                st.success("✅ Displaying SANGLI-ONLY civic data")
+            # Fallback to general civic data if Sangli-only not available
+            elif os.path.exists("data/processed/civic_labeled.csv"):
                 self.civic_df = pd.read_csv("data/processed/civic_labeled.csv")
-                if 'timestamp' in self.civic_df.columns:
-                    self.civic_df['timestamp'] = pd.to_datetime(self.civic_df['timestamp'])
+                st.warning("⚠️ Displaying mixed data (includes other cities). Run Sangli-only pipeline for pure Sangli data.")
+            else:
+                st.error("❌ No civic data found. Please run the data collection pipeline first.")
+                return
                 
-            # Load topic modeling results
-            if os.path.exists("models/topics/topic_results.pkl"):
+            if 'timestamp' in self.civic_df.columns:
+                self.civic_df['timestamp'] = pd.to_datetime(self.civic_df['timestamp'])
+                
+            # Load topic modeling results (prioritize Sangli-specific)
+            if os.path.exists("models/topics/sangli_dashboard_topics.pkl"):
+                with open("models/topics/sangli_dashboard_topics.pkl", 'rb') as f:
+                    self.topic_results = pickle.load(f)
+                st.success("✅ Displaying Sangli-specific topic analysis")
+            elif os.path.exists("models/topics/topic_results.pkl"):
                 with open("models/topics/topic_results.pkl", 'rb') as f:
                     self.topic_results = pickle.load(f)
+                st.info("📊 General topic analysis loaded")
                     
         except Exception as e:
             st.error(f"Error loading data: {str(e)}")
@@ -107,37 +121,119 @@ class SimpleCivicDashboard:
                     st.info(f"Neutral: {count} ({pct:.1f}%)")
                     
     def render_topic_analysis(self):
-        """Render topic modeling results"""
-        st.subheader("Civic Issue Categories")
+        """Render Sangli-specific civic issue topic analysis"""
+        st.subheader("🏛️ Sangli Civic Issue Categories")
         
-        if self.topic_results is None:
-            st.warning("No topic modeling results available. Run topic_model.py first.")
-            return
+        # Check if we have Sangli topic results or civic data with topic categories
+        if self.civic_df is not None and 'topic_category' in self.civic_df.columns:
+            # Use topic categories from Sangli data
+            category_counts = self.civic_df['topic_category'].value_counts()
             
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.markdown("**Topics Discovered:**")
-            if 'lda_topics' in self.topic_results and self.topic_results['lda_topics']:
-                for i, topic in enumerate(self.topic_results['lda_topics']):
-                    category = topic.get('civic_category', 'general')
-                    words = ', '.join(topic['top_words'][-5:])
-                    st.markdown(f"**Topic {i} ({category.title()})**")
-                    st.markdown(f"Keywords: {words}")
-                    st.markdown("---")
+            col1, col2 = st.columns([2, 1])
+            
+            with col1:
+                # Topic distribution bar chart
+                fig_topics = px.bar(
+                    x=category_counts.index,
+                    y=category_counts.values,
+                    title="Sangli Civic Issue Distribution",
+                    labels={'x': 'Issue Category', 'y': 'Number of Records'},
+                    color=category_counts.values,
+                    color_continuous_scale='viridis'
+                )
+                fig_topics.update_layout(xaxis_tickangle=45)
+                st.plotly_chart(fig_topics, width='stretch')
+            
+            with col2:
+                st.markdown("**📊 Issue Breakdown:**")
+                total_records = len(self.civic_df)
+                
+                for category, count in category_counts.items():
+                    percentage = (count / total_records) * 100
+                    category_display = category.replace('_', ' ').title()
                     
-        with col2:
-            st.markdown("**Issue Categories:**")
-            categories = {}
-            if 'lda_topics' in self.topic_results:
-                for topic in self.topic_results['lda_topics']:
-                    category = topic.get('civic_category', 'general')
-                    if category in categories:
-                        categories[category] += 1
-                    else:
-                        categories[category] = 1
+                    # Get category emoji
+                    category_emojis = {
+                        'water_supply': '💧',
+                        'traffic_transport': '🚦', 
+                        'roads_infrastructure': '🛣️',
+                        'waste_sanitation': '🗑️',
+                        'municipal_services': '🏛️',
+                        'development_planning': '🏗️',
+                        'general_civic': '📋'
+                    }
+                    
+                    emoji = category_emojis.get(category, '📌')
+                    st.markdown(f"{emoji} **{category_display}**: {count} ({percentage:.1f}%)")
             
-            for category, count in categories.items():
+            # Topic details section
+            st.markdown("---")
+            st.subheader("📝 Issue Category Details")
+            
+            # Let user select category to explore
+            selected_category = st.selectbox(
+                "Select civic issue category to explore:",
+                options=category_counts.index,
+                format_func=lambda x: f"{category_emojis.get(x, '📌')} {x.replace('_', ' ').title()}"
+            )
+            
+            if selected_category:
+                category_data = self.civic_df[self.civic_df['topic_category'] == selected_category]
+                
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    st.markdown(f"**📊 {selected_category.replace('_', ' ').title()} - Sentiment Analysis**")
+                    sentiment_dist = category_data['label'].value_counts()
+                    
+                    fig_sentiment = px.pie(
+                        values=sentiment_dist.values,
+                        names=sentiment_dist.index,
+                        title=f"Sentiment for {selected_category.replace('_', ' ').title()}",
+                        color_discrete_map={
+                            'positive': '#2E8B57',
+                            'neutral': '#FFD700',
+                            'negative': '#DC143C'
+                        }
+                    )
+                    st.plotly_chart(fig_sentiment, width='stretch')
+                
+                with col2:
+                    st.markdown(f"**📝 Sample {selected_category.replace('_', ' ').title()} Issues:**")
+                    
+                    sample_texts = category_data['text'].head(3)
+                    for i, text in enumerate(sample_texts, 1):
+                        with st.expander(f"Example {i}"):
+                            st.write(text[:200] + "..." if len(text) > 200 else text)
+                            
+                            # Show sentiment for this specific text
+                            row_sentiment = category_data[category_data['text'] == text]['label'].iloc[0]
+                            sentiment_color = {
+                                'positive': '🟢',
+                                'neutral': '🟡', 
+                                'negative': '🔴'
+                            }
+                            st.markdown(f"Sentiment: {sentiment_color.get(row_sentiment, '⚫')} {row_sentiment.title()}")
+                            
+        elif self.topic_results is not None:
+            # Use old topic results format
+            st.markdown("**📊 General Topic Analysis Available**")
+            if 'categories' in self.topic_results and 'counts' in self.topic_results:
+                categories = self.topic_results['categories']
+                counts = self.topic_results['counts']
+                
+                fig_topics = px.bar(x=categories, y=counts, title="Topic Distribution")
+                st.plotly_chart(fig_topics, use_container_width=True)
+        
+        else:
+            st.warning("⚠️ No topic analysis available")
+            st.markdown("**To generate Sangli topic analysis:**")
+            st.code("python src/sangli_topic_model.py")
+            
+            if st.button("🔄 Run Topic Analysis Now"):
+                with st.spinner("Analyzing Sangli civic issues..."):
+                    # This would run the topic analysis
+                    st.info("Topic analysis feature - run the command above in terminal")
                 st.markdown(f"- **{category.title()}**: {count} topic(s)")
                 
     def render_data_explorer(self):
