@@ -10,7 +10,6 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
-import plotly.io as pio
 import pickle
 import os
 import json
@@ -56,41 +55,6 @@ st.markdown("""
 
 </style>
 """, unsafe_allow_html=True)
-
-# Dark mode CSS (applied when user toggles Dark mode)
-DARK_CSS = """
-<style>
-/* Dark mode base */
-.stApp {
-    background-color: #0b1220 !important;
-    color: #e6eef6 !important;
-}
-.stSidebar {
-    background-color: #071222 !important;
-    color: #e6eef6 !important;
-}
-.stSidebar .stMarkdown, .stSidebar .stText, .stMarkdown, .stText {
-    color: #dbeafe !important;
-}
-.stButton>button, .stDownloadButton>button {
-    background-color: #1f2937 !important;
-    color: #e6eef6 !important;
-    border: 1px solid #374151 !important;
-}
-.stMetric, .stMetricValue {
-    color: #dbeafe !important;
-}
-/* Tweak charts background */
-.plotly-graph-div .main-svg, .js-plotly-plot .plotly, .js-plotly-plot .main-svg, .plotly {
-    background-color: transparent !important;
-}
-
-/* Force plotly dark paper/bg colors when template not applied */
-.js-plotly-plot .plotly .main-svg, .js-plotly-plot .plotly .bg {
-    fill: transparent !important;
-}
-</style>
-"""
 
 class SimpleCivicDashboard:
     def __init__(self):
@@ -516,17 +480,13 @@ class SimpleCivicDashboard:
             if self.topic_results:
                 st.markdown("- LDA topic modeling")
                     
-            # Model file status
-            st.markdown("**Model Files:**")
+            # Model file status (show only available/ready indicators)
+            # Keep the system info clean by not showing 'pending' warnings.
             if os.path.exists("models/sentiment_model.pkl"):
                 st.success("Sentiment model trained")
-            else:
-                st.warning("Sentiment model pending — run evaluation to train/evaluate the model")
-                
+
             if os.path.exists("models/topics/topic_results.pkl") or self.topic_results is not None:
                 st.success("Topic model ready")
-            else:
-                st.warning("Topic model pending")
 
         # Presentation panel (show metrics and visuals when in presentation mode)
         if self.presentation_mode:
@@ -663,30 +623,6 @@ class SimpleCivicDashboard:
             st.session_state['presentation_mode'] = False
         st.session_state['presentation_mode'] = st.sidebar.checkbox("Presentation mode (large visuals)", value=st.session_state['presentation_mode'])
         self.presentation_mode = st.session_state['presentation_mode']
-        
-        # Dark mode toggle
-        if 'dark_mode' not in st.session_state:
-            st.session_state['dark_mode'] = False
-        st.session_state['dark_mode'] = st.sidebar.checkbox("Dark mode", value=st.session_state['dark_mode'])
-        self.dark_mode = st.session_state['dark_mode']
-        # Inject dark CSS when enabled
-        try:
-            if self.dark_mode:
-                st.markdown(DARK_CSS, unsafe_allow_html=True)
-                try:
-                    pio.templates.default = 'plotly_dark'
-                except Exception:
-                    pass
-            else:
-                # reset to default light template
-                try:
-                    pio.templates.default = 'plotly'
-                except Exception:
-                    pass
-                # re-run to clear injected CSS when turning off (best-effort)
-                pass
-        except Exception:
-            pass
         
     def run_dashboard(self):
         """Run the complete dashboard"""
