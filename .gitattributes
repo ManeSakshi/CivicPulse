@@ -1,0 +1,2 @@
+# Large CSV files only - small processed files can be regular Git
+data/external/*.csv filter=lfs diff=lfs merge=lfs -text

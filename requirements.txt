@@ -1,49 +1,63 @@
-# Core
-pandas
-numpy
+# CivicPulse - Civic Sentiment Analysis Platform
+# Complete ML/NLP requirements for Windows + Python 3.13
 
-# NLP & Preprocessing
-spacy
-nltk
-emoji
-langdetect
-googletrans==4.0.0-rc1
+# Core scientific computing
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+scipy>=1.10.0
 
-# ML & Deep Learning
-torch
-transformers
-scikit-learn
+# Deep Learning & Transformers
+torch>=2.0.0
+transformers>=4.40.0
+datasets>=2.14.0
 
-# Explainable AI
-shap
-lime
+# NLP Processing
+spacy>=3.7.0
+nltk>=3.8.0
+textblob>=0.17.0
+vaderSentiment>=3.3.0
 
-# Topic Modeling
-bertopic
-gensim
+# Advanced Topic Modeling
+bertopic>=0.16.0
+sentence-transformers>=2.6.0
+umap-learn>=0.5.0
+hdbscan>=0.8.0
 
-# Visualization & Dashboard
-matplotlib
-seaborn
-plotly
-dash
-streamlit
+# Traditional Topic Modeling
+gensim>=4.3.0
 
-# Backend & API
-flask
-fastapi
-uvicorn
+# Data Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.17.0
 
-# Database
-sqlalchemy
-psycopg2-binary   # (for PostgreSQL if needed)
-sqlite-utils
+# Interactive Dashboard
+streamlit>=1.28.0
 
 # Data Collection APIs
-tweepy
-newsapi-python
-python-dotenv
+tweepy>=4.14.0
+newsapi-python>=0.2.7
+requests>=2.31.0
 
-# Dev & Utilities
-jupyter
-notebook
+# Configuration & Environment
+python-dotenv>=1.0.0
+
+# Database & Storage
+sqlite3
+sqlalchemy>=2.0.0
+
+# Model Explainability (optional)
+shap>=0.42.0
+lime>=0.2.0
+
+# Jupyter Notebooks (development)
+jupyter>=1.0.0
+ipywidgets>=8.0.0
+
+# Progress bars & utilities  
+tqdm>=4.65.0
+
+# Additional utilities
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
