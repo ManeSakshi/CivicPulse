@@ -8,6 +8,8 @@ import pandas as pd
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from textblob import TextBlob
 import os
+import shutil
+from datetime import datetime
 
 def label_sangli_sentiment():
     """Generate sentiment labels for Sangli civic data"""
@@ -72,6 +74,19 @@ def label_sangli_sentiment():
         # Save labeled Sangli data
         os.makedirs('data/processed', exist_ok=True)
         output_file = 'data/processed/sangli_labeled.csv'
+
+        # Archive existing labeled file (if present)
+        if os.path.exists(output_file):
+            try:
+                archive_dir = 'data/processed/archive'
+                os.makedirs(archive_dir, exist_ok=True)
+                ts = datetime.now().strftime('%Y%m%d_%H%M%S')
+                archived_path = os.path.join(archive_dir, f'sangli_labeled_{ts}.csv')
+                shutil.move(output_file, archived_path)
+                print(f'[ARCHIVE] Existing labeled file moved to: {archived_path}')
+            except Exception as e:
+                print(f'[WARN] Failed to archive existing labeled file: {e}')
+
         df.to_csv(output_file, index=False)
         
         # Print distribution
@@ -96,6 +111,18 @@ def label_sangli_sentiment():
         }
         
         summary_file = 'data/processed/sangli_summary.json'
+        # Archive existing summary as well
+        if os.path.exists(summary_file):
+            try:
+                archive_dir = 'data/processed/archive'
+                os.makedirs(archive_dir, exist_ok=True)
+                ts = datetime.now().strftime('%Y%m%d_%H%M%S')
+                archived_summary = os.path.join(archive_dir, f'sangli_summary_{ts}.json')
+                shutil.move(summary_file, archived_summary)
+                print(f'[ARCHIVE] Existing summary moved to: {archived_summary}')
+            except Exception as e:
+                print(f'[WARN] Failed to archive existing summary: {e}')
+
         import json
         with open(summary_file, 'w') as f:
             json.dump(summary, f, indent=2)

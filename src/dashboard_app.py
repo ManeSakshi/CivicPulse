@@ -110,7 +110,7 @@ class CivicPulseDashboard:
                     'negative': '#DC143C'
                 }
             )
-            st.plotly_chart(fig_pie, use_container_width=True)
+            st.plotly_chart(fig_pie, config={'responsive': True})
             
         with col2:
             # Sentiment stats
@@ -148,7 +148,7 @@ class CivicPulseDashboard:
             legend_title="Sentiment"
         )
         
-        st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, config={'responsive': True})
         
     def render_topic_analysis(self):
         """Render topic modeling results"""
@@ -215,7 +215,7 @@ class CivicPulseDashboard:
             height=400
         )
         
-        st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, config={'responsive': True})
         
     def render_data_explorer(self):
         """Render data exploration section"""
@@ -262,7 +262,7 @@ class CivicPulseDashboard:
         st.markdown(f"**Showing {len(filtered_df)} records** (filtered from {len(self.civic_df)} total)")
         
         display_df = filtered_df[['timestamp', 'text', 'label', 'vader_sentiment', 'textblob_sentiment']].head(show_count)
-        st.dataframe(display_df, use_container_width=True, height=400)
+    st.dataframe(display_df, height=400)
         
     def render_model_info(self):
         """Render model and data information"""

@@ -15,58 +15,8 @@ REM Step 1: Collect ONLY Sangli data
 echo.
 echo [STEP 1/4] SANGLI-ONLY DATA COLLECTION
 echo --------------------------------------------------
-echo [%time%] Collecting Sangli-specific news...
-python src\fetch_sangli_only.py
-if %errorlevel% equ 0 (
-    echo [%time%] Sangli News Collection: SUCCESS
-) else (
-    echo [%time%] Sangli News Collection: COMPLETED WITH WARNINGS
-)
-
-echo.
-echo [%time%] Collecting Sangli-specific Twitter data...
-python src\fetch_sangli_twitter.py
-if %errorlevel% equ 0 (
-    echo [%time%] Sangli Twitter Collection: SUCCESS
-) else (
-    echo [%time%] Sangli Twitter Collection: COMPLETED WITH WARNINGS
-)
-
-REM Step 2: Process ONLY Sangli data
-echo.
-echo [STEP 2/4] SANGLI DATA PREPROCESSING
-echo --------------------------------------------------
-echo [%time%] Processing Sangli civic data...
-python src\preprocess_sangli.py
-if %errorlevel% equ 0 (
-    echo [%time%] Sangli Preprocessing: SUCCESS
-) else (
-    echo [%time%] Sangli Preprocessing: FAILED
-    goto :error
-)
-
-REM Step 3: Generate labels for Sangli data
-echo.
-echo [STEP 3/4] SANGLI SENTIMENT LABELING
-echo --------------------------------------------------
-echo [%time%] Labeling Sangli civic sentiment...
-python src\label_sangli.py
-if %errorlevel% equ 0 (
-    echo [%time%] Sangli Labeling: SUCCESS
-) else (
-    echo [%time%] Sangli Labeling: FAILED
-    goto :error
-)
-
-REM Step 4: Final status
-echo.
-echo [STEP 4/4] SANGLI PIPELINE STATUS
-echo --------------------------------------------------
 echo [%time%] Checking Sangli data status...
-python -c "
-import pandas as pd
-import os
-
+python src\sangli_status_report.py
 print('SANGLI-ONLY PIPELINE STATUS REPORT')
 print('=' * 50)
 
